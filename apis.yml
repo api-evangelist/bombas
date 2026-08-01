@@ -1,8 +1,18 @@
 aid: bombas
 name: Bombas
-description: 'Bombas is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Bombas is a New York City based direct-to-consumer comfort apparel brand
+  founded in 2013 by David Heath and Randy Goldberg, selling socks, underwear, t-shirts
+  and slippers on a one-purchased-equals-one-donated model that has powered more than
+  200 million donated items through a network of over 4,000 giving partners serving
+  people experiencing homelessness. The company is privately held, was funded on Shark
+  Tank in 2014, and runs its ecommerce on Shopify Plus. Bombas does not publish a
+  first-party developer program or REST API, but its storefront at shop.bombas.com
+  exposes a real agent-facing commerce surface: a published llms.txt / agents.md, a
+  Universal Commerce Protocol (UCP) merchant profile at /.well-known/ucp, and a live
+  MCP endpoint at /api/ucp/mcp implementing the UCP Shopping Service, alongside OAuth
+  2.0 / OpenID Connect discovery for Shopify customer accounts.'
 url: https://raw.githubusercontent.com/api-evangelist/bombas/refs/heads/main/apis.yml
+image: https://avatars.githubusercontent.com/u/30065139?v=4
 x-type: company
 x-source: harvest:secondary-market
 x-tier: stub
@@ -12,12 +22,89 @@ created: '2026-07-31'
 modified: '2026-07-31'
 tags:
 - Company
-apis: []
+- Retail
+- Ecommerce
+- Apparel
+- Direct to Consumer
+- Commerce
+- Agentic Commerce
+- Universal Commerce Protocol
+- Model Context Protocol
+- Shopify
+apis:
+- aid: bombas:commerce
+  name: Bombas Commerce (UCP Shopping)
+  description: 'The agent-facing commerce surface of the Bombas Shopify storefront.
+    The store publishes a Universal Commerce Protocol merchant profile at
+    https://shop.bombas.com/.well-known/ucp declaring UCP versions 2026-04-08 and
+    2026-01-23, the dev.ucp.shopping service over an MCP transport at
+    https://shop.bombas.com/api/ucp/mcp, and the checkout, cart, fulfillment,
+    discount and payment-handler capabilities. The MCP endpoint implements the UCP
+    Shopping Service OpenRPC contract of 13 methods covering catalog search, cart,
+    checkout and order retrieval. tools/list is gated behind a UCP-Agent profile
+    URI, so tool input schemas come from the published OpenRPC schema the merchant
+    profile itself points at, not from live introspection.'
+  humanURL: https://shop.bombas.com/agents.md
+  baseURL: https://shop.bombas.com/api/ucp/mcp
+  tags:
+  - Commerce
+  - Agentic Commerce
+  - Model Context Protocol
+  - Universal Commerce Protocol
+  - Checkout
+  - Cart
+  - Catalog
+  properties:
+  - type: MCPServer
+    url: mcp/bombas-mcp.yml
+  - type: LLMsTxt
+    url: llms/bombas-llms.txt
+  - type: WellKnown
+    url: well-known/bombas-well-known.yml
+  - type: Authentication
+    url: authentication/bombas-authentication.yml
+  - type: OAuthScopes
+    url: scopes/bombas-scopes.yml
+  - type: Conventions
+    url: conventions/bombas-conventions.yml
+  - type: Idempotency
+    url: conventions/bombas-conventions.yml
+  - type: ErrorCatalog
+    url: errors/bombas-problem-types.yml
+  - type: DataModel
+    url: data-model/bombas-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/bombas-lifecycle.yml
+  - type: Conformance
+    url: conformance/bombas-conformance.yml
+  - type: AgentSkill
+    url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/bombas-domain-security.yml
 - type: Website
+  url: https://bombas.com/
+- type: Documentation
+  url: https://shop.bombas.com/agents.md
+- type: GitHubOrganization
+  url: https://github.com/bombas
+- type: Support
+  url: https://shop.bombas.com/pages/help
+- type: SignUp
+  url: https://shop.bombas.com/account/login
+- type: TermsOfService
+  url: https://shop.bombas.com/policies/terms-of-service
+- type: PrivacyPolicy
+  url: https://shop.bombas.com/policies/privacy-policy
+- type: SecondaryMarket
   url: https://forgeglobal.com/bombas_stock/
+x-enrichment:
+  date: '2026-07-31'
+  status: enriched
+  artifacts_added: 19
+  pass: local-v1

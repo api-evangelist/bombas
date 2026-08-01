@@ -1,0 +1,118 @@
+generated: '2026-07-31'
+method: searched
+source: https://shop.bombas.com/agents.md
+sources:
+- https://shop.bombas.com/agents.md
+- https://shop.bombas.com/llms.txt
+- https://shop.bombas.com/.well-known/ucp
+- https://ucp.dev/2026-04-08/services/shopping/mcp.openrpc.json
+summary: >-
+  Bombas has no first-party REST API and therefore no house REST conventions.
+  The cross-cutting semantics captured here are those of the Universal Commerce
+  Protocol Shopping Service that the Bombas storefront implements and declares
+  in its own merchant profile, plus the read-only Shopify storefront JSON
+  endpoints Bombas documents in its published agents.md.
+transport:
+  style: JSON-RPC 2.0 over HTTP POST (MCP)
+  endpoint: https://shop.bombas.com/api/ucp/mcp
+  content_type: application/json
+  accept: application/json, text/event-stream
+authentication:
+  agent_identity:
+    header: UCP-Agent
+    json_rpc_param: meta.ucp-agent.profile
+    value: URI of the calling platform's UCP profile document
+    required: true
+  customer_identity:
+    model: OAuth 2.0 authorization code + PKCE (S256) via Shopify customer accounts
+    discovery: https://shop.bombas.com/.well-known/openid-configuration
+    artifact: authentication/bombas-authentication.yml
+idempotency:
+  supported: true
+  header: Idempotency-Key
+  json_rpc_param: meta.idempotency-key
+  format: uuid
+  description: Unique key for retry safety. Maps to the HTTP Idempotency-Key header.
+  required_on:
+  - complete_checkout
+  - cancel_checkout
+  - cancel_cart
+  optional_on:
+  - create_checkout
+  - update_checkout
+  - create_cart
+  - update_cart
+  - get_checkout
+  - get_cart
+  - get_order
+  - search_catalog
+  - lookup_catalog
+  - get_product
+  retention: not published
+  evidence: mcp/bombas-ucp-shopping-2026-04-08.openrpc.json components.schemas.meta
+    and the per-method meta allOf required lists
+versioning:
+  scheme: dated protocol version
+  current: '2026-04-08'
+  supported: ['2026-04-08', '2026-01-23']
+  negotiation: version-pinned profile documents at /.well-known/ucp/{version}
+  discovery: https://shop.bombas.com/.well-known/ucp
+buyer_approval:
+  rule: >-
+    Checkout requires human approval. Agents must not complete payment without
+    explicit buyer consent. Where contemporaneous buyer approval cannot be
+    obtained, Bombas' agents.md directs agents to route the purchase through
+    Shop Pay via the Shopify Shop skill instead.
+  enforced_by: complete_checkout
+  source: https://shop.bombas.com/agents.md
+buyer_context:
+  params:
+  - context.address_country
+  - context.currency
+  purpose: accurate pricing and availability
+  source: https://shop.bombas.com/agents.md
+rate_limiting:
+  documented: true
+  scope: per IP on the MCP endpoint
+  signal: HTTP 429
+  guidance: back off on 429 responses
+  limit_count: not published
+  observed:
+  - {url: 'https://shop.bombas.com/products.json', http_status: 429, body: local_rate_limited}
+  - {host: bombas.com, note: 'primary brand host answers 429 to all automated requests
+      including /robots.txt - bot mitigation, not a published API rate limit'}
+pagination:
+  style: query + filters + pagination parameters on search_catalog
+  detail: parameter shape defined by https://ucp.dev/2026-04-08/schemas/shopping/catalog_search.json
+  note: Bombas publishes no pagination documentation of its own
+error_envelope:
+  transport_errors: JSON-RPC 2.0 error object (observed code -32001 with data.code
+    and data.continue_url)
+  business_errors: >-
+    UCP error_response object - {ucp: {status: error}, messages: [...],
+    continue_url} where each message carries type, code, content, severity and an
+    optional RFC 9535 JSONPath `path` to the offending component
+  problem_json: false
+  artifact: errors/bombas-problem-types.yml
+read_only_surface:
+  description: Endpoints Bombas documents in agents.md for agents that only read
+  endpoints:
+  - {method: GET, path: /collections/all, description: browse all products}
+  - {method: GET, path: '/products/{handle}', description: product page}
+  - {method: GET, path: '/products/{handle}.json', description: product JSON}
+  - {method: GET, path: '/collections/{handle}', description: collection page}
+  - {method: GET, path: '/collections/{handle}/products.json', description: collection
+      products JSON}
+  - {method: GET, path: '/search?q={query}&type=product', description: storefront search}
+  - {method: GET, path: /sitemap.xml, description: sitemap}
+  host: https://shop.bombas.com
+  auth: none
+tracing:
+  request_id_header: not published
+cross_links:
+  authentication: authentication/bombas-authentication.yml
+  scopes: scopes/bombas-scopes.yml
+  errors: errors/bombas-problem-types.yml
+  lifecycle: lifecycle/bombas-lifecycle.yml
+  mcp: mcp/bombas-mcp.yml
+  data_model: data-model/bombas-data-model.yml

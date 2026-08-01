@@ -1,0 +1,84 @@
+generated: '2026-07-31'
+method: probed
+source: https://shop.bombas.com/.well-known/ucp
+note: >-
+  Bombas makes no compliance or certification claims of its own on any surface we
+  could reach. Everything asserted below was observed directly against
+  shop.bombas.com or read out of the contract that store declares. No
+  Compliance pointer is wired, because no published compliance program was found.
+standards:
+- id: ucp-2026-04-08
+  name: Universal Commerce Protocol 2026-04-08
+  conforms: true
+  evidence: /.well-known/ucp declares version 2026-04-08 plus supported_versions and
+    a dev.ucp.shopping service endpoint
+- id: mcp
+  name: Model Context Protocol
+  conforms: true
+  evidence: dev.ucp.shopping declares transport "mcp" at https://shop.bombas.com/api/ucp/mcp;
+    the endpoint answers JSON-RPC 2.0 (observed error -32001)
+- id: openrpc-1.3.2
+  name: OpenRPC 1.3.2
+  conforms: true
+  evidence: the merchant profile names https://ucp.dev/2026-04-08/services/shopping/mcp.openrpc.json
+    as the schema for its MCP service
+- id: oauth2
+  name: OAuth 2.0
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server publishes authorization_endpoint,
+    token_endpoint and grant_types_supported
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server returns 200 with issuer + jwks_uri
+- id: rfc9728-oauth-protected-resource-metadata
+  conforms: true
+  evidence: /.well-known/oauth-protected-resource returns 200 with resource + authorization_servers
+- id: oidc-discovery
+  name: OpenID Connect Discovery 1.0
+  conforms: true
+  evidence: /.well-known/openid-configuration returns 200 with issuer, jwks_uri, id_token_signing_alg_values_supported
+- id: rfc7636-pkce
+  conforms: true
+  evidence: code_challenge_methods_supported [S256]
+- id: idempotency-key
+  conforms: true
+  evidence: meta.idempotency-key (HTTP Idempotency-Key, uuid) is defined contract-wide
+    and required on complete_checkout, cancel_checkout and cancel_cart
+- id: rfc9535-jsonpath
+  conforms: true
+  evidence: UCP message objects locate the offending component with an RFC 9535 JSONPath
+    in `path`
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on shop.bombas.com and beebetter.bombas.com;
+    blocked (429) on bombas.com
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: errors use the UCP message envelope, not application/problem+json
+- id: openapi
+  conforms: false
+  evidence: no OpenAPI or Swagger document found on any Bombas host; the machine-readable
+    contract is OpenRPC over MCP
+- id: asyncapi
+  conforms: false
+  evidence: no event, streaming or webhook surface is published by Bombas
+- id: a2a
+  name: A2A Agent Card
+  conforms: false
+  evidence: /.well-known/agent-card.json and /.well-known/agent.json both 404 on shop.bombas.com
+    and beebetter.bombas.com
+- id: rfc8615-well-known-uris
+  conforms: true
+  evidence: five discovery documents served under /.well-known/ on shop.bombas.com
+- id: llms-txt
+  conforms: true
+  evidence: /llms.txt and /agents.md both return 200 text/markdown
+compliance_program:
+  published: false
+  certifications: []
+  note: No trust center, SOC 2, ISO 27001, PCI DSS or HIPAA claim was found on any
+    reachable Bombas host.
+x-evidence:
+  fetched: '2026-07-31'
+  hosts_probed: [bombas.com, www.bombas.com, shop.bombas.com, beebetter.bombas.com,
+    bombas.myshopify.com]

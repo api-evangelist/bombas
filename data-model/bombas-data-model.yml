@@ -1,0 +1,73 @@
+generated: '2026-07-31'
+method: derived
+source: mcp/bombas-ucp-shopping-2026-04-08.openrpc.json
+note: >-
+  Derived from the result schemas of the UCP Shopping Service contract the Bombas
+  storefront declares, not from an OpenAPI (Bombas publishes none). Entity
+  internals live in the referenced ucp.dev JSON Schemas; only the entities the
+  Bombas endpoint actually exposes and the relationships its method surface
+  implies are recorded here.
+entities:
+- name: product
+  schema: https://ucp.dev/2026-04-08/schemas/shopping/catalog_lookup.json#/$defs/get_product_response
+  operations: [get_product, lookup_catalog, search_catalog]
+  read_only: true
+  description: A Bombas catalog product with its variants and options.
+- name: cart
+  schema: https://ucp.dev/2026-04-08/schemas/shopping/cart.json
+  operations: [create_cart, get_cart, update_cart, cancel_cart]
+  description: A mutable basket of catalog line items held for an agent session.
+- name: checkout
+  schema: https://ucp.dev/2026-04-08/schemas/shopping/checkout.json
+  operations: [create_checkout, get_checkout, update_checkout, complete_checkout, cancel_checkout]
+  description: A purchase session carrying buyer, shipping and payment state; completing
+    it places an order and requires buyer approval.
+- name: order
+  schema: https://ucp.dev/2026-04-08/schemas/shopping/order.json
+  operations: [get_order]
+  read_only: true
+  description: The current-state snapshot of a placed order.
+- name: message
+  schema: https://ucp.dev/2026-04-08/schemas/shopping/types/message.json
+  description: Error, warning or info message attached to any cart, checkout or order
+    result; carries code, severity and an RFC 9535 JSONPath to the component it refers
+    to.
+relationships:
+- from: cart
+  to: product
+  kind: has_many
+  via: line items referencing catalog product/variant identifiers
+- from: checkout
+  to: cart
+  kind: belongs_to
+  via: a checkout is created from cart contents
+  confidence: medium
+  note: implied by the create_cart -> create_checkout flow documented in agents.md;
+    the field name is defined in the ucp.dev checkout schema
+- from: checkout
+  to: order
+  kind: has_one
+  via: complete_checkout places the order
+- from: order
+  to: product
+  kind: has_many
+  via: order line items
+- from: checkout
+  to: message
+  kind: has_many
+  via: messages[]
+- from: cart
+  to: message
+  kind: has_many
+  via: messages[]
+- from: order
+  to: message
+  kind: has_many
+  via: messages[]
+capabilities_shaping_the_model:
+- {id: dev.ucp.shopping.cart, effect: cart entity}
+- {id: dev.ucp.shopping.checkout, effect: checkout entity}
+- {id: dev.ucp.shopping.fulfillment, effect: 'shipping methods on checkout; single
+    destination only (allows_multi_destination.shipping = false)'}
+- {id: dev.ucp.shopping.discount, effect: discounts on cart and checkout}
+render: null

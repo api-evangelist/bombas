@@ -1,0 +1,98 @@
+generated: '2026-07-31'
+method: searched
+source: https://shop.bombas.com/.well-known/
+notes: >-
+  Probed the primary brand host (bombas.com, Astro on Vercel), the impact host
+  (beebetter.bombas.com, Vercel) and the Shopify Plus storefront host
+  (shop.bombas.com -> shops.myshopify.com). bombas.com and www.bombas.com are
+  behind bot mitigation that answers HTTP 429 with an HTML challenge body for
+  EVERY path, including /robots.txt, so nothing on that host can be observed by
+  an automated client; those probes are recorded as blocked, not as absent. All
+  documents below were observed on the storefront host.
+hosts:
+- host: https://shop.bombas.com
+  role: Shopify Plus storefront (agent / commerce surface)
+  documents:
+  - path: /.well-known/ucp
+    status: 200
+    content_type: application/json
+    file: bombas-ucp.json
+    note: UCP merchant profile - versions 2026-04-08 + 2026-01-23, dev.ucp.shopping
+      over MCP, checkout/cart/fulfillment/discount capabilities, payment handlers
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: bombas-openid-configuration.json
+    note: Shopify customer-account OIDC discovery, issuer https://shopify.com/authentication/11195850
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: bombas-oauth-authorization-server.json
+    note: RFC 8414 authorization-server metadata
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: application/json
+    file: bombas-oauth-protected-resource.json
+    note: RFC 9728 protected-resource metadata, bearer via header
+  - path: /.well-known/apple-app-site-association
+    status: 200
+    content_type: application/json
+    note: not captured - mobile app association, not an API discovery document
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    content_type: text/markdown
+    file: ../llms/bombas-llms.txt
+  - path: /agents.md
+    status: 200
+    content_type: text/markdown
+    note: canonical agent doc, byte-identical content to /llms.txt
+  - path: /robots.txt
+    status: 200
+- host: https://beebetter.bombas.com
+  role: Bombas impact / giving microsite (Vercel)
+  documents:
+  - path: /robots.txt
+    status: 200
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+- host: https://bombas.com
+  role: primary brand + retail site (Astro on Vercel)
+  blocked: true
+  documents:
+  - path: /robots.txt
+    status: 429
+  - path: /.well-known/security.txt
+    status: 429
+  - path: /.well-known/openid-configuration
+    status: 429
+  - path: /.well-known/oauth-authorization-server
+    status: 429
+  - path: /.well-known/api-catalog
+    status: 429
+  - path: /.well-known/ai-plugin.json
+    status: 429
+  - path: /.well-known/agent-card.json
+    status: 429
+  - path: /.well-known/agent.json
+    status: 429
+  - path: /llms.txt
+    status: 429
+  - path: /openapi.json
+    status: 429
+  - path: /swagger.json
+    status: 429
+x-evidence:
+  fetched: '2026-07-31'
+  method: HTTP GET, desktop browser user-agent, paced 4s between requests

@@ -1,0 +1,57 @@
+generated: '2026-07-31'
+method: searched
+source: https://shop.bombas.com/.well-known/ucp
+versioning:
+  scheme: dated protocol version (UCP)
+  current: '2026-04-08'
+  supported:
+  - version: '2026-04-08'
+    profile: https://bombas.myshopify.com/.well-known/ucp/2026-04-08
+    label: latest stable
+  - version: '2026-01-23'
+    profile: https://bombas.myshopify.com/.well-known/ucp/2026-01-23
+  discovery: https://shop.bombas.com/.well-known/ucp
+  docs: https://shop.bombas.com/agents.md
+  note: >-
+    Version negotiation is handled by the merchant profile, which lists every
+    protocol version the store still serves and a version-pinned profile
+    document for each. Capability entries additionally declare requires.protocol.min
+    (2026-04-08 for fulfillment and discount).
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+  note: >-
+    No deprecation or sunset policy is published by Bombas. The only observable
+    deprecation signal is the drop-off of older UCP versions from the
+    supported_versions map in the merchant profile.
+sla:
+  url: null
+status_page:
+  url: null
+  note: >-
+    Bombas publishes no first-party status page. The storefront runs on Shopify,
+    whose platform status page (status.shopify.com) covers the infrastructure but
+    is not a Bombas-published operational commitment, so no StatusPage pointer is
+    wired.
+changelog:
+  url: null
+  note: No dated changelog is published for the storefront or its agent surface.
+deprecated_operations: []
+hosts:
+- host: shop.bombas.com
+  role: Shopify Plus storefront + UCP/MCP agent surface
+  state: active
+- host: bombas.com
+  role: primary brand and retail site (Astro on Vercel)
+  state: active
+  note: answers HTTP 429 to automated clients on every path
+- host: beebetter.bombas.com
+  role: impact / giving microsite (Vercel)
+  state: active
+- host: bombas.myshopify.com
+  role: canonical Shopify origin referenced by the UCP profile
+  state: active
+x-evidence:
+  fetched: '2026-07-31'
+  url: https://shop.bombas.com/.well-known/ucp
+  http_status: 200

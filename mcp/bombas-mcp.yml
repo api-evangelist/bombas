@@ -1,0 +1,132 @@
+generated: '2026-07-31'
+method: searched
+status: published
+source: https://shop.bombas.com/.well-known/ucp
+docs: https://shop.bombas.com/agents.md
+server:
+  name: bombas-ucp-shopping
+  transport: http
+  protocol: MCP (JSON-RPC 2.0 over HTTP POST)
+  url: https://shop.bombas.com/api/ucp/mcp
+  canonical_url: https://bombas.myshopify.com/api/ucp/mcp
+  service: dev.ucp.shopping
+  standard: Universal Commerce Protocol (UCP)
+  spec: https://ucp.dev/2026-04-08/specification/overview/
+  schema: https://ucp.dev/2026-04-08/services/shopping/mcp.openrpc.json
+  schema_file: bombas-ucp-shopping-2026-04-08.openrpc.json
+  versions:
+    current: '2026-04-08'
+    supported:
+    - '2026-04-08'
+    - '2026-01-23'
+  platform: Shopify (shop_id 11195850)
+introspection:
+  tools_list: gated
+  observed:
+    request: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 422
+    error_code: -32001
+    error_message: UCP discovery failed
+    error_data_code: invalid_profile_url
+    error_data_content: 'Unable to fetch agent profile: Missing profile uri'
+  reason: >-
+    Every UCP call requires a meta.ucp-agent.profile URI (mapped to the HTTP
+    UCP-Agent header) identifying the calling platform's own UCP profile
+    document. An anonymous tools/list is rejected before the tool set is
+    returned, so the tool list below is taken from the OpenRPC schema the
+    store's own merchant profile points at - a published contract, not a guess.
+tools_source: >-
+  https://ucp.dev/2026-04-08/services/shopping/mcp.openrpc.json - OpenRPC 1.3.2,
+  "UCP Shopping Service 2026-04-08", referenced by name from
+  https://shop.bombas.com/.well-known/ucp services["dev.ucp.shopping"][0].schema
+tools:
+- name: search_catalog
+  description: Search for products using query text, filters, and pagination.
+  params: [meta, catalog]
+  idempotency_key_required: false
+- name: lookup_catalog
+  description: Batch lookup of products or variants by identifier.
+  params: [meta, catalog]
+  idempotency_key_required: false
+- name: get_product
+  description: Retrieve complete product detail by identifier with optional interactive
+    option selection.
+  params: [meta, catalog]
+  idempotency_key_required: false
+- name: create_cart
+  description: Create a new cart session.
+  params: [meta, cart]
+  idempotency_key_required: false
+- name: get_cart
+  description: Get cart.
+  params: [meta, id]
+  idempotency_key_required: false
+- name: update_cart
+  description: Update cart.
+  params: [meta, id, cart]
+  idempotency_key_required: false
+- name: cancel_cart
+  description: Cancel cart.
+  params: [meta, id]
+  idempotency_key_required: true
+- name: create_checkout
+  description: Create a new checkout session.
+  params: [meta, checkout]
+  idempotency_key_required: false
+- name: get_checkout
+  description: Get checkout.
+  params: [meta, id]
+  idempotency_key_required: false
+- name: update_checkout
+  description: Update checkout.
+  params: [meta, id, checkout]
+  idempotency_key_required: false
+- name: complete_checkout
+  description: Complete checkout and place order. Buyer approval is required before
+    payment.
+  params: [meta, id, checkout]
+  idempotency_key_required: true
+- name: cancel_checkout
+  description: Cancel checkout.
+  params: [meta, id]
+  idempotency_key_required: true
+- name: get_order
+  description: Get the current state of an order. Returns the full order entity as
+    a current-state snapshot.
+  params: [meta, id]
+  idempotency_key_required: false
+capabilities:
+- id: dev.ucp.shopping.cart
+  version: '2026-04-08'
+- id: dev.ucp.shopping.checkout
+  version: '2026-04-08'
+- id: dev.ucp.shopping.fulfillment
+  version: '2026-04-08'
+  config:
+    allows_multi_destination_shipping: false
+    allows_method_combinations: [[shipping]]
+- id: dev.ucp.shopping.discount
+  version: '2026-04-08'
+payment_handlers:
+- id: shopify.card
+  version: '2026-01-15'
+  card_brands: [visa, master, american_express, discover, diners_club]
+- id: shop_pay
+  version: '2026-04-08'
+  shop_id: '11195850'
+- id: google_pay
+  version: '2026-01-15'
+  card_networks: [VISA, MASTERCARD, AMEX, DISCOVER]
+  gateway: shopify
+related:
+  shop_skill: https://shop.app/SKILL.md
+  shop_skill_note: >-
+    Bombas' own agents.md recommends the cross-store Shopify "Shop skill" at
+    https://shop.app/SKILL.md for buy-for-me agents. That skill is published by
+    Shopify, not by Bombas, and is referenced here rather than harvested as a
+    Bombas artifact.
+x-evidence:
+  fetched: '2026-07-31'
+  ucp_profile: {url: 'https://shop.bombas.com/.well-known/ucp', http_status: 200, content_type: application/json}
+  mcp_endpoint: {url: 'https://shop.bombas.com/api/ucp/mcp', http_status: 422, note: gated on UCP-Agent profile}
+  openrpc_schema: {url: 'https://ucp.dev/2026-04-08/services/shopping/mcp.openrpc.json', http_status: 200}

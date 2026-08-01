@@ -1,0 +1,69 @@
+generated: '2026-07-31'
+method: probed
+source: https://shop.bombas.com/.well-known/openid-configuration
+docs: https://shop.bombas.com/agents.md
+summary:
+  types: [oauth2, openIdConnect, custom-header]
+  oauth2_flows: [authorizationCode, refreshToken, jwt-bearer]
+  pkce: [S256]
+  api_key_in: []
+  note: >-
+    Bombas publishes no first-party developer API and issues no API keys. Two
+    distinct auth models were observed on the storefront host. (1) The UCP /
+    MCP commerce endpoint is not OAuth-gated for discovery; it requires a
+    UCP-Agent identity header carrying the calling platform's own UCP profile
+    URI, and it defers payment authorization to the buyer. (2) Shopify customer
+    accounts on the same host publish full OAuth 2.0 / OpenID Connect discovery.
+schemes:
+- name: ucp-agent
+  type: custom-header
+  in: header
+  parameter_name: UCP-Agent
+  json_rpc_param: meta.ucp-agent.profile
+  required: true
+  format: uri
+  description: >-
+    URL to the calling platform's UCP profile document. Required on every UCP
+    Shopping Service call; an anonymous call returns JSON-RPC error -32001
+    "UCP discovery failed" with data.code invalid_profile_url.
+  sources: [mcp/bombas-ucp-shopping-2026-04-08.openrpc.json]
+- name: shopify-customer-account-oidc
+  type: openIdConnect
+  openIdConnectUrl: https://shop.bombas.com/.well-known/openid-configuration
+  issuer: https://shopify.com/authentication/11195850
+  authorizationUrl: https://shopify.com/authentication/11195850/oauth/authorize
+  tokenUrl: https://shopify.com/authentication/11195850/oauth/token
+  end_session_endpoint: https://shopify.com/authentication/11195850/logout
+  jwks_uri: https://shopify.com/authentication/11195850/.well-known/jwks.json
+  response_types_supported: [code]
+  grant_types_supported: [authorization_code, refresh_token, 'urn:ietf:params:oauth:grant-type:jwt-bearer']
+  token_endpoint_auth_methods_supported: [client_secret_basic]
+  code_challenge_methods_supported: [S256]
+  id_token_signing_alg_values_supported: [RS256]
+  subject_types_supported: [public]
+  claims_supported: [iss, sub, aud, exp, iat, nonce, sid, email, email_verified]
+  scopes: [openid, email, 'customer-account-api:full', 'customer-account-mcp-api:full']
+  sources: [well-known/bombas-openid-configuration.json]
+- name: shopify-oauth-authorization-server
+  type: oauth2
+  rfc: RFC 8414
+  metadata_url: https://shop.bombas.com/.well-known/oauth-authorization-server
+  identical_to: shopify-customer-account-oidc
+  sources: [well-known/bombas-oauth-authorization-server.json]
+protected_resource:
+  rfc: RFC 9728
+  metadata_url: https://shop.bombas.com/.well-known/oauth-protected-resource
+  resource: https://shop.bombas.com
+  authorization_servers: [https://shopify.com/authentication/11195850]
+  bearer_methods_supported: [header]
+  sources: [well-known/bombas-oauth-protected-resource.json]
+not_found:
+- {path: /.well-known/security.txt, host: shop.bombas.com, status: 404}
+- {note: 'no api.bombas.com or developer.bombas.com host resolves in DNS'}
+x-evidence:
+  fetched: '2026-07-31'
+  urls:
+  - {url: 'https://shop.bombas.com/.well-known/openid-configuration', http_status: 200}
+  - {url: 'https://shop.bombas.com/.well-known/oauth-authorization-server', http_status: 200}
+  - {url: 'https://shop.bombas.com/.well-known/oauth-protected-resource', http_status: 200}
+  - {url: 'https://shop.bombas.com/api/ucp/mcp', http_status: 422, note: 'anonymous tools/list rejected'}

@@ -1,0 +1,21 @@
+generated: '2026-07-31'
+method: generated
+source: mcp/bombas-ucp-shopping-2026-04-08.openrpc.json + https://shop.bombas.com/agents.md
+note: >-
+  Bombas publishes no OpenAPI, so these skills are grounded in the UCP Shopping
+  Service method names from the OpenRPC contract the store declares in its own
+  merchant profile, and in the rules Bombas states in its published agents.md.
+  Every method named in a skill exists verbatim in that contract. Bombas itself
+  publishes no skill files; its agents.md points buy-for-me agents at Shopify's
+  cross-store Shop skill (https://shop.app/SKILL.md), which is Shopify's artifact,
+  not Bombas'.
+skills:
+- file: bombas-shop-and-checkout.md
+  name: Shop the Bombas catalog and complete a checkout
+  api: mcp/bombas-ucp-shopping-2026-04-08.openrpc.json
+  operations: [search_catalog, get_product, create_cart, update_cart, create_checkout,
+    update_checkout, complete_checkout, get_order]
+- file: bombas-catalog-lookup.md
+  name: Read the Bombas catalog without transacting
+  api: mcp/bombas-ucp-shopping-2026-04-08.openrpc.json
+  operations: [search_catalog, lookup_catalog, get_product]
