@@ -23,6 +23,17 @@ modified: '2026-07-31'
 tags:
 - Company
 - Retail
+- E-Commerce
+- Apparel
+- Direct to Consumer
+- Commerce
+- Agentic Commerce
+- Universal Commerce Protocol
+- MCP
+- Shopify
+tags_raw:
+- Company
+- Retail
 - Ecommerce
 - Apparel
 - Direct to Consumer
@@ -47,6 +58,14 @@ apis:
   humanURL: https://shop.bombas.com/agents.md
   baseURL: https://shop.bombas.com/api/ucp/mcp
   tags:
+  - Commerce
+  - Agentic Commerce
+  - MCP
+  - Universal Commerce Protocol
+  - Checkout
+  - Cart
+  - Catalog
+  tags_raw:
   - Commerce
   - Agentic Commerce
   - Model Context Protocol
