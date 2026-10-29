@@ -64,5 +64,102 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Bombas is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/bombas_stock/
+Bombas is a New York City based direct-to-consumer comfort apparel brand founded in 2013 by David Heath and Randy Goldberg, selling socks, underwear, t-shirts and slippers on a one-purchased-equals-one-donated model that has powered more than 200 million donated items through a network of over 4,000 giving partners serving people experiencing homelessness. The company is privately held, was funded on Shark Tank in 2014, and runs its ecommerce on Shopify Plus. Bombas does not publish a first-party developer program or REST API, but its storefront at shop.bombas.com exposes a real agent-facing commerce surface: a published llms.txt / agents.md, a Universal Commerce Protocol (UCP) merchant profile at /.well-known/ucp, and a live MCP endpoint at /api/ucp/mcp implementing the UCP Shopping Service, alongside OAuth 2.0 / OpenID Connect discovery for Shopify customer accounts.
+
+**Areas:** Company · Retail · E-Commerce · Apparel · Direct to Consumer · Commerce · Agentic Commerce · Universal Commerce Protocol · MCP · Shopify
+
+## Bombas on APIs.io
+
+Everything profiled for Bombas is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/bombas/](https://apis.io/providers/bombas/)** — or go straight to one of the APIs or properties below.
+
+### APIs (1)
+
+- [Bombas Commerce (UCP Shopping)](https://apis.io/apis/bombas/commerce/) — The agent-facing commerce surface of the Bombas Shopify storefront. The store publishes a Universal Commerce Protocol merchant profile at…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [bombas-ucp-shopping](https://apis.io/servers/bombas/bombas-ucp-shopping/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Bombas Authentication](https://apis.io/security/bombas/bombas-authentication/)
+- [Bombas Domain Security](https://apis.io/security/bombas/bombas-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Bombas Scopes](https://apis.io/scopes/bombas/bombas-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://bombas.com/)
+- [Documentation](https://shop.bombas.com/agents.md)
+- [Sign up](https://shop.bombas.com/account/login)
+- [Support](https://shop.bombas.com/pages/help)
+- [Terms of service](https://shop.bombas.com/policies/terms-of-service)
+- [Privacy policy](https://shop.bombas.com/policies/privacy-policy)
+- [GitHub](https://github.com/bombas)
+
+## API Evangelist rating
+
+**Kin Score 25.3** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 28.0 |
+| Access clarity | 34.2 |
+
+**Agent readiness 22.3** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | documented (partial credit) |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | platform (partial credit) |
+
+**Regulatory alignment 34.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/bombas/](https://apis.io/providers/bombas/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Bombas: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/bombas/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
